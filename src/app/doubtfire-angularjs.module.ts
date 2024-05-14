@@ -229,7 +229,6 @@ import { MarkedPipe } from './common/pipes/marked.pipe';
 import { AlertService } from './common/services/alert.service';
 import { ScormPlayerComponent } from './common/scorm-player/scorm-player.component';
 import { ScormPlayerModal } from './common/scorm-player/scorm-player-modal.component';
-import { TestAttemptService } from './api/services/test-attempt.service';
 
 export const DoubtfireAngularJSModule = angular.module('doubtfire', [
   'doubtfire.config',
@@ -312,7 +311,6 @@ DoubtfireAngularJSModule.factory(
 );
 DoubtfireAngularJSModule.factory('CreateNewUnitModal', downgradeInjectable(CreateNewUnitModal));
 DoubtfireAngularJSModule.factory('ScormPlayerModal', downgradeInjectable(ScormPlayerModal));
-DoubtfireAngularJSModule.factory('testAttemptService', downgradeInjectable(TestAttemptService));
 
 // directive -> component
 DoubtfireAngularJSModule.directive(
