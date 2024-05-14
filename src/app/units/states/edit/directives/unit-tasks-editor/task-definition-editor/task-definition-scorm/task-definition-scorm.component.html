@@ -3,30 +3,35 @@
     Enable test for task
   </mat-checkbox>
 
-  <div class="basis-1/2 flex flex-col">
-    <f-file-drop
-      mode="event"
-      (filesDropped)="uploadScormData($event)"
-      accept="application/zip"
-      [desiredFileName]="'SCORM zip'"
-    />
-    @if (taskDefinition.hasScormData) {
-      <div class="flex flex-row gap-4 pt-4">
-        <button mat-flat-button color="warn" (click)="removeScormData()" class="flex-grow me-4">
-          Delete SCORM Zip
-        </button>
-        <button mat-flat-button color="accent" (click)="downloadScormData()" class="flex-grow ms-4">
-          Download SCORM Zip
-        </button>
-      </div>
-    }
-  </div>
-
   @if (taskDefinition.scormEnabled) {
+    <div class="basis-1/2 flex flex-col">
+      <f-file-drop
+        mode="event"
+        (filesDropped)="uploadScormData($event)"
+        accept="application/zip"
+        [desiredFileName]="'SCORM zip'"
+      />
+      @if (taskDefinition.hasScormData) {
+        <div class="flex flex-row gap-4 pt-4">
+          <button mat-flat-button color="warn" (click)="removeScormData()" class="flex-grow me-4">
+            Delete SCORM Zip
+          </button>
+          <button mat-flat-button color="accent" (click)="downloadScormData()" class="flex-grow ms-4">
+            Download SCORM Zip
+          </button>
+        </div>
+      }
+    </div>
+
     <div class="flex-grow flex flex-row gap-4 pt-4">
-      <mat-checkbox class="basis-1/2" matInput required [(ngModel)]="taskDefinition.scormTimeDelayEnabled">
-        Enable incremental time delays between test attempts
-      </mat-checkbox>
+      <div class="basis-1/2" >
+        <mat-checkbox matInput required [(ngModel)]="taskDefinition.scormTimeDelayEnabled" disabled>
+          Enable incremental time delays between test attempts
+        </mat-checkbox>
+        <mat-checkbox matInput required [(ngModel)]="taskDefinition.scormAllowReview">
+          Allow students to review completed test attempt
+        </mat-checkbox>
+      </div>
       <mat-form-field appearance="outline" class="basis-1/2">
         <mat-label>Attempt limit</mat-label>
         <input
