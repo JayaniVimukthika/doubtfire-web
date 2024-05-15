@@ -1,9 +1,10 @@
 <div fxLayout="row" fxLayoutAlign="space-evenly center">
   <div fxLayout="column" fxLayoutAlign="space-around center">
     <div>
-      <hr class="hr-text" data-content="SCORM Test Summary" />
+      <hr class="hr-text" data-content="Knowledge Check Summary" />
       <div class="markdown-to-html" [innerHTML]="comment.text"></div>
-      <button mat-button (click)="reviewScormTest()">Review test</button>
+      <button mat-button (click)="reviewScormTest()" [hidden]="!task.definition.scormAllowReview">Review test</button>
+      <br/>
       <hr class="hr-fade" />
     </div>
   </div>

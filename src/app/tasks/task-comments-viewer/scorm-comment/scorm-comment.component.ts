@@ -1,6 +1,5 @@
 import {Component, OnInit, Input} from '@angular/core';
 import {Task, TaskComment} from 'src/app/api/models/doubtfire-model';
-import {ScormPlayerModal} from 'src/app/common/scorm-player/scorm-player-modal.component';
 
 @Component({
   selector: 'scorm-comment',
@@ -11,11 +10,11 @@ export class ScormCommentComponent implements OnInit {
   @Input() task: Task;
   @Input() comment: TaskComment;
 
-  constructor(private modalService: ScormPlayerModal) {}
+  constructor() {}
 
   ngOnInit() {}
 
   reviewScormTest() {
-    this.modalService.show(this.task, 'review');
+    window.open(`#/task_def/${this.task.taskDefId}/task/${this.task.id}/scorm-player/review`, '_blank');
   }
 }

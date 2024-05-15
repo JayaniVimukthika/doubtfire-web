@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 import {UserService} from './user.service';
 import API_URL from 'src/app/config/constants/apiURL';
-import {Task, ScormDataModel, ScormPlayerContext} from 'src/app/api/models/doubtfire-model';
+import {ScormDataModel, ScormPlayerContext} from 'src/app/api/models/doubtfire-model';
 
 @Injectable({
   providedIn: 'root',
@@ -18,8 +18,12 @@ export class ScormAdapterService {
     this.xhr = new XMLHttpRequest();
   }
 
-  set task(task: Task) {
-    this.context.task = task;
+  set taskId(taskId: number) {
+    this.context.taskId = taskId;
+  }
+
+  set mode(mode: 'browse' | 'normal' | 'review') {
+    this.context.mode = mode;
   }
 
   get state() {
@@ -47,7 +51,7 @@ export class ScormAdapterService {
     }
 
     // TODO: move this part into the player component
-    this.xhr.open('GET', `${this.apiBaseUrl}/${this.context.task.id}/latest`, false);
+    this.xhr.open('GET', `${this.apiBaseUrl}/${this.context.taskId}/latest`, false);
 
     let noTestFound = false;
     let startNewTest = false;
@@ -80,7 +84,7 @@ export class ScormAdapterService {
     if (!startNewTest) {
       this.xhr.open(
         'PATCH',
-        `${this.apiBaseUrl}/${this.context.task.id}/session/${this.context.attemptId}`,
+        `${this.apiBaseUrl}/${this.context.taskId}/session/${this.context.attemptId}`,
         false,
       );
       this.xhr.send();
@@ -92,7 +96,7 @@ export class ScormAdapterService {
       this.dataModel.restore(currentSession.cmi_datamodel);
       console.log(this.dataModel.dump());
     } else {
-      this.xhr.open('POST', `${this.apiBaseUrl}/${this.context.task.id}/session`, false);
+      this.xhr.open('POST', `${this.apiBaseUrl}/${this.context.taskId}/session`, false);
       this.xhr.send();
       console.log(this.xhr.responseText);
 
@@ -124,7 +128,7 @@ export class ScormAdapterService {
 
     this.xhr.open(
       'PATCH',
-      `${this.apiBaseUrl}/${this.context.task.id}/session/${this.context.attemptId}`,
+      `${this.apiBaseUrl}/${this.context.taskId}/session/${this.context.attemptId}`,
       false,
     );
     this.xhr.setRequestHeader('Content-Type', 'application/json');
@@ -200,7 +204,7 @@ export class ScormAdapterService {
     const xhr = new XMLHttpRequest();
     xhr.open(
       'PATCH',
-      `${this.apiBaseUrl}/${this.context.task.id}/session/${this.context.attemptId}`,
+      `${this.apiBaseUrl}/${this.context.taskId}/session/${this.context.attemptId}`,
       true,
     );
     xhr.setRequestHeader('Content-Type', 'application/json');

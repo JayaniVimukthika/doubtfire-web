@@ -1,10 +1,10 @@
-import {Component, OnInit, Inject} from '@angular/core';
-import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
+import {Component, OnInit, Input, HostListener} from '@angular/core';
 import {DomSanitizer, SafeResourceUrl} from '@angular/platform-browser';
-import {Task, ScormPlayerContext} from 'src/app/api/models/doubtfire-model';
+import {ScormPlayerContext} from 'src/app/api/models/doubtfire-model';
 import {ScormAdapterService} from 'src/app/api/services/scorm-adapter.service';
 import {AppInjector} from 'src/app/app-injector';
 import {DoubtfireConstants} from 'src/app/config/constants/doubtfire-constants';
+import {GlobalStateService, ViewType} from 'src/app/projects/states/index/global-state.service';
 
 declare global {
   interface Window {
@@ -20,20 +20,29 @@ declare global {
 export class ScormPlayerComponent implements OnInit {
   context: ScormPlayerContext;
 
-  task: Task;
-  currentMode: 'browse' | 'normal' | 'review' = 'normal';
+  @Input()
+  taskId: number;
+
+  @Input()
+  taskDefId: number;
+
+  @Input()
+  mode: 'browse' | 'normal' | 'review';
+
   iframeSrc: SafeResourceUrl;
 
   constructor(
-    private dialogRef: MatDialogRef<ScormPlayerComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: {task: Task, mode: 'browse' | 'normal' | 'review'},
+    private globalState: GlobalStateService,
     private scormAdapter: ScormAdapterService,
     private sanitizer: DomSanitizer,
   ) {}
 
   ngOnInit(): void {
-    this.task = this.data.task;
-    this.scormAdapter.task = this.task;
+    this.globalState.setView(ViewType.OTHER);
+    this.globalState.hideHeader();
+
+    this.scormAdapter.taskId = this.taskId;
+    this.scormAdapter.mode = this.mode;
 
     window.API_1484_11 = {
       Initialize: () => this.scormAdapter.Initialize(),
@@ -46,23 +55,21 @@ export class ScormPlayerComponent implements OnInit {
       GetDiagnostic: (errorCode: string) => this.scormAdapter.GetDiagnostic(errorCode),
     };
 
-    this.currentMode = this.data.mode;
-
     this.iframeSrc = this.sanitizer.bypassSecurityTrustResourceUrl(
-      `${AppInjector.get(DoubtfireConstants).API_URL}/scorm/${this.task.taskDefId}/index.html`,
+      `${AppInjector.get(DoubtfireConstants).API_URL}/scorm/${this.taskDefId}/index.html`,
     );
   }
 
-  close(): void {
+  @HostListener('window:beforeunload', ['$event'])
+  beforeUnload($event: any): void {
     if (this.scormAdapter.state == 'Initialized') {
       console.log('SCORM player closing during an initialized session, commiting DataModel');
       this.scormAdapter.Commit();
     }
-    // TODO: would be nice if we can destroy this entire adapter object when the modal is closed
-    console.log('Clearing player context and DataModel');
+  }
+
+  @HostListener('window:unload', ['$event'])
+  onUnload($event: any): void {
     this.scormAdapter.destroy();
-    const iframe = document.getElementsByTagName('iframe')[0];
-    iframe?.parentNode?.removeChild(iframe);
-    this.dialogRef.close();
   }
 }

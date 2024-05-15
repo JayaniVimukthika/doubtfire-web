@@ -1,0 +1,27 @@
+<mat-card appearance="outlined" [hidden]="!task.scormEnabled">
+  <mat-card-header>
+    <mat-card-title>Knowledge Check</mat-card-title>
+  </mat-card-header>
+  <mat-card-content>
+    <p>
+      You have to successfully pass this knowledge check to complete the task.
+    </p>
+    <p>
+      You have {{ (task.definition.scormAttemptLimit > 0) ? task.definition.scormAttemptLimit : 'unlimited' }} attempts to complete this test.
+    </p>
+    <p [hidden]="!task.definition.scormTimeDelayEnabled">
+      There will be an increased time delay between test attempts. First 2 attempts will not have a time delay in between.
+    </p>
+  </mat-card-content>
+  <mat-card-actions class="space-x-2">
+    <button mat-stroked-button (click)="launchScormPlayer()">
+      <mat-icon style="width: 20px; height: 20px; font-size: 20px" aria-label="Launch icon">
+        launch
+      </mat-icon>
+      Attempt test
+    </button>
+    <button mat-stroked-button (click)="requestMoreAttempts()" [hidden]="task.definition.scormAttemptLimit === 0">
+      Request more attempts
+    </button>
+  </mat-card-actions>
+</mat-card>

@@ -225,10 +225,9 @@ import {FTaskSheetViewComponent} from './units/states/tasks/viewer/directives/f-
 import {TasksViewerComponent} from './units/states/tasks/tasks-viewer/tasks-viewer.component';
 
 import {FUnitsComponent} from './admin/states/f-units/f-units.component';
-import { MarkedPipe } from './common/pipes/marked.pipe';
-import { AlertService } from './common/services/alert.service';
-import { ScormPlayerComponent } from './common/scorm-player/scorm-player.component';
-import { ScormPlayerModal } from './common/scorm-player/scorm-player-modal.component';
+import {MarkedPipe} from './common/pipes/marked.pipe';
+import {AlertService} from './common/services/alert.service';
+import {TaskScormCardComponent} from './projects/states/dashboard/directives/task-dashboard/directives/task-scorm-card/task-scorm-card.component';
 
 export const DoubtfireAngularJSModule = angular.module('doubtfire', [
   'doubtfire.config',
@@ -310,7 +309,6 @@ DoubtfireAngularJSModule.factory(
   downgradeInjectable(EditProfileDialogService),
 );
 DoubtfireAngularJSModule.factory('CreateNewUnitModal', downgradeInjectable(CreateNewUnitModal));
-DoubtfireAngularJSModule.factory('ScormPlayerModal', downgradeInjectable(ScormPlayerModal));
 
 // directive -> component
 DoubtfireAngularJSModule.directive(
@@ -367,6 +365,10 @@ DoubtfireAngularJSModule.directive(
 DoubtfireAngularJSModule.directive(
   'activityTypeList',
   downgradeComponent({component: ActivityTypeListComponent}),
+);
+DoubtfireAngularJSModule.directive(
+  'fTaskScormCard',
+  downgradeComponent({component: TaskScormCardComponent}),
 );
 DoubtfireAngularJSModule.directive(
   'fTaskStatusCard',
@@ -444,11 +446,6 @@ DoubtfireAngularJSModule.directive(
   downgradeComponent({component: TaskSubmissionHistoryComponent}),
 );
 DoubtfireAngularJSModule.directive('fUnits', downgradeComponent({component: FUnitsComponent}));
-
-DoubtfireAngularJSModule.directive(
-  'fScormPlayerComponent',
-  downgradeComponent({component: ScormPlayerComponent}),
-);
 
 // Global configuration
 DoubtfireAngularJSModule.directive(

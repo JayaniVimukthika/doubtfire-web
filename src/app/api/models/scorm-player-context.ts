@@ -1,4 +1,4 @@
-import {Task, User} from 'src/app/api/models/doubtfire-model';
+import {User} from 'src/app/api/models/doubtfire-model';
 
 type DataModelState = 'Uninitialized' | 'Initialized' | 'Terminated';
 
@@ -48,7 +48,7 @@ export class ScormPlayerContext {
     return CMIErrorCodes[value];
   }
 
-  task: Task;
+  taskId: number;
   user: User;
 
   attemptNumber: number;
